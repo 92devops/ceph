@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-with-rbd-vol
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+    imagePullPolicy: IfNotPresent
+    command: ["/bin/sh", "-c", "sleep 86400"]
+    volumeMounts:
+    - name : rbdpod
+      mountPath: /data
+  volumes:
+    - name: rbdpod
+      rbd:
+        monitors:
+        - '172.18.0.41:6789' # 此为 monitor地址
+        - '172.18.0.42:6789'
+        - '172.18.0.43:6789'
+        pool: rbddata
+        image: myimg
+        fsType: ext4
+        readOnly: false
+        user: k8s
+        keyring: /etc/ceph/ceph.client.k8s.keyring 

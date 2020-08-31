@@ -1,0 +1,16 @@
+---
+apiVersion: storage.k8s.io/v1beta1
+kind: StorageClass
+metadata:
+  name: rbd-dynamic
+  annotations:
+    storageclass.beta.kubernetes.io/is-defautl-class: "true"
+provisioner: kubernetes.io/rbd
+parameters:
+  monitors: 172.18.0.41:6789,172.18.0.42:6789,172.18.0.43:6789
+  adminId: admin
+  adminSecretName: ceph-admin-secret
+  adminSecretNamespace: kube-system
+  pool: kube-cluster
+  userId: kube
+  userSecretName: ceph-kube-secret
